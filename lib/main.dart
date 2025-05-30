@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// Main entry point of the app
 void main() => runApp(const TemperatureConverterApp());
 
+// Root widget of the application
 class TemperatureConverterApp extends StatelessWidget {
   const TemperatureConverterApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Set up MaterialApp with theme and home page
     return MaterialApp(
       title: 'Temperature Converter',
       theme: ThemeData(
@@ -22,6 +25,7 @@ class TemperatureConverterApp extends StatelessWidget {
   }
 }
 
+// Stateful widget for the temperature converter UI
 class TemperatureConverter extends StatefulWidget {
   const TemperatureConverter({super.key});
 
@@ -29,12 +33,18 @@ class TemperatureConverter extends StatefulWidget {
   _TemperatureConverterState createState() => _TemperatureConverterState();
 }
 
+// State class for TemperatureConverter
 class _TemperatureConverterState extends State<TemperatureConverter> {
+  // Controller for the input TextField
   final TextEditingController _controller = TextEditingController();
+  // List to store conversion history
   final List<String> _history = [];
+  // Boolean to track conversion direction (true: F to C, false: C to F)
   bool _isFtoC = true;
+  // String to store the converted value
   String _converted = '';
 
+  // Method to perform temperature conversion and update history
   void _convert() {
     double? input = double.tryParse(_controller.text);
     if (input == null) return;
@@ -42,10 +52,12 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
     double result;
     String historyEntry;
     if (_isFtoC) {
+      // Fahrenheit to Celsius conversion
       result = (input - 32) * 5 / 9;
       historyEntry =
           '🌡️ ${input.toStringAsFixed(1)}°F ➔ ${result.toStringAsFixed(2)}°C';
     } else {
+      // Celsius to Fahrenheit conversion
       result = input * 9 / 5 + 32;
       historyEntry =
           '🌡️ ${input.toStringAsFixed(1)}°C ➔ ${result.toStringAsFixed(2)}°F';
@@ -59,6 +71,7 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
 
   @override
   Widget build(BuildContext context) {
+    // Check device orientation for responsive layout
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
@@ -75,6 +88,7 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
     );
   }
 
+  // Build layout for portrait orientation
   Widget _buildPortraitLayout() {
     return SingleChildScrollView(
       child: Column(
@@ -88,6 +102,7 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
     );
   }
 
+  // Build layout for landscape orientation
   Widget _buildLandscapeLayout() {
     return SingleChildScrollView(
       child: Row(
@@ -108,6 +123,7 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
     );
   }
 
+  // Build widgets for input section (conversion type, input field, button)
   List<Widget> _buildInputWidgets() {
     return [
       const Text(
@@ -120,12 +136,14 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Column(
           children: [
+            // Radio button for Fahrenheit to Celsius
             RadioListTile<bool>(
               title: const Text('Fahrenheit to Celsius'),
               value: true,
               groupValue: _isFtoC,
               onChanged: (val) => setState(() => _isFtoC = val!),
             ),
+            // Radio button for Celsius to Fahrenheit
             RadioListTile<bool>(
               title: const Text('Celsius to Fahrenheit'),
               value: false,
@@ -138,6 +156,7 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
       const SizedBox(height: 16),
       Row(
         children: [
+          // Input field for temperature value
           Expanded(
             child: TextField(
               controller: _controller,
@@ -149,6 +168,7 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
             ),
           ),
           const SizedBox(width: 10),
+          // Display converted value
           Text(
             '= $_converted°',
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -156,6 +176,7 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
         ],
       ),
       const SizedBox(height: 20),
+      // Convert button
       SizedBox(
         height: 48,
         child: ElevatedButton.icon(
@@ -174,6 +195,7 @@ class _TemperatureConverterState extends State<TemperatureConverter> {
     ];
   }
 
+  // Build the conversion history section
   Widget _buildHistorySection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
